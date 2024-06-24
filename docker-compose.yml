@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  bewerbung:
+    image: bewerbung
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://postgres:admin@postgres:5432/prisma?schema=public
+    networks:
+      - bewerbung-network
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=prisma
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - bewerbung-network
+
+networks:
+  bewerbung-network:
+
+volumes:
+  pgdata:
