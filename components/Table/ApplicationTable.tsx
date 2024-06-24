@@ -5,6 +5,7 @@ import ApplicationTableTopButtons from "./ApplicationTableTopBar";
 import { Application } from "@prisma/client";
 import ApplicationTableBody from "./ApplicationTableBody";
 import ApplicationTablePagination from "./ApplicationTablePagination";
+import TableFilter from "./TableFilter/TableFilter";
 
 interface ApplicationTableProps {
   applications: Application[];
@@ -20,6 +21,7 @@ const ApplicationTable = ({
   return (
     <>
       <ApplicationTableTopButtons />
+      <TableFilter />
       <Table striped>
         <ApplicationTableHeader />
         <ApplicationTableBody

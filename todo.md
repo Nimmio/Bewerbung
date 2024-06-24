@@ -1,14 +1,16 @@
 # Todos
 
-## Misc
-
-- Git
-
 ## Table
 
 - Date Filter
 
+- State Filter
+
 - Column Selector
+
+- Case Unsensitive Search
+
+- Flex Topbar
 
 ## Application View
 

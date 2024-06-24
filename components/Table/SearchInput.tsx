@@ -1,5 +1,5 @@
 import { Input } from "@mantine/core";
-import { useDebouncedState, useDebouncedValue } from "@mantine/hooks";
+import { useDebouncedValue } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
