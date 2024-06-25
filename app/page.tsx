@@ -24,10 +24,10 @@ export default async function Home({
       archived: false,
       OR: [
         {
-          description: { contains: search },
+          description: { contains: search, mode: "insensitive" },
         },
         {
-          company: { contains: search },
+          company: { contains: search, mode: "insensitive" },
         },
       ],
       AND: getQuery(filter),
@@ -39,10 +39,10 @@ export default async function Home({
       archived: false,
       OR: [
         {
-          description: { contains: search },
+          description: { contains: search, mode: "insensitive" },
         },
         {
-          company: { contains: search },
+          company: { contains: search, mode: "insensitive" },
         },
       ],
       AND: getQuery(filter),

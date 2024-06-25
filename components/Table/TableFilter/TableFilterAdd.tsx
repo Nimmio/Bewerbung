@@ -130,8 +130,7 @@ const TableFilterAdd = ({ onSave }: TableFilterAddProps) => {
       <Grid.Col span={1}>
         <Flex h="100%" align={"flex-end"}>
           <ActionIcon
-            mb="0.25em"
-            size="sm"
+            size="md"
             disabled={typeValue === null}
             onClick={() => handleFilterSave()}
           >

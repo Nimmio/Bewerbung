@@ -55,4 +55,11 @@ model History {
   archivedFrom  Boolean? 
   archivedTo    Boolean?
 }
-
+//Todo finish model
+model Settings {
+  id            Int @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  defaultLimit  Int
+  
+}

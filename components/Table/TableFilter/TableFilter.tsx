@@ -26,7 +26,6 @@ const TableFilter = () => {
     replace(`${pathname}?${params.toString()}`);
   };
 
-  //TODO: implement
   const handleDeleteFilter = (index: number) => {
     const params = new URLSearchParams(searchParams);
     const newFilters = filters;
@@ -49,7 +48,7 @@ const TableFilter = () => {
         onDelete={(index) => handleDeleteFilter(index)}
       />
 
-      <Divider mt="sm" />
+      <Divider mt="lg" />
     </>
   );
 };

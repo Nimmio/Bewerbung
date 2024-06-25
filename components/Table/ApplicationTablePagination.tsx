@@ -50,8 +50,8 @@ const ApplicationTablePagination = ({
         Limit:
         <Select
           w={"5em"}
-          data={["10", "15", "25", "50", "100"]}
-          defaultValue={limit.toString()}
+          data={["10", "25", "50", "100", "250", "500", "1000"]}
+          value={limit.toString()}
           onChange={(value) => handleLimitChange(value || "10")}
         />
       </Flex>

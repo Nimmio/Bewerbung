@@ -2,15 +2,13 @@
 
 ## Table
 
+- Loading Indicator
+
 - Date Filter
 
 - State Filter
 
 - Column Selector
-
-- Case Unsensitive Search
-
-- Flex Topbar
 
 ## Application View
 
@@ -21,6 +19,10 @@
 ## Settings
 
 - Language Switch
+
+- Default Limit
+
+- Default Columns
 
 ## Statistics
 

@@ -6,6 +6,7 @@ import { Application } from "@prisma/client";
 import ApplicationTableBody from "./ApplicationTableBody";
 import ApplicationTablePagination from "./ApplicationTablePagination";
 import TableFilter from "./TableFilter/TableFilter";
+import { useState } from "react";
 
 interface ApplicationTableProps {
   applications: Application[];
@@ -18,10 +19,13 @@ const ApplicationTable = ({
   searchString,
   applicationsCount,
 }: Readonly<ApplicationTableProps>) => {
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   return (
     <>
-      <ApplicationTableTopButtons />
-      <TableFilter />
+      <ApplicationTableTopButtons
+        onToggleFilter={() => setShowFilter(!showFilter)}
+      />
+      {showFilter ? <TableFilter /> : <></>}
       <Table striped>
         <ApplicationTableHeader />
         <ApplicationTableBody

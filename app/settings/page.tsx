@@ -2,8 +2,6 @@
 
 import { Button } from "@mantine/core";
 import React from "react";
-import { fakerDE as faker } from "@faker-js/faker";
-import { CreateApplication } from "@/types/application";
 import { createDemoData, saveApplication } from "../actions";
 import { notifications } from "@mantine/notifications";
 const Settings = () => {
@@ -14,7 +12,9 @@ const Settings = () => {
   };
   return (
     <main>
-      <Button onClick={() => handleCreateDemoData()}>DemoData</Button>
+      <Button onClick={() => handleCreateDemoData()} color="red">
+        DemoData
+      </Button>
     </main>
   );
 };

@@ -3,11 +3,15 @@ import { IconFilter, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 import SearchInput from "./SearchInput";
 
-const ApplicationTableTop = () => {
+interface ApplicationTableTopProps {
+  onToggleFilter: () => void;
+}
+
+const ApplicationTableTop = ({ onToggleFilter }: ApplicationTableTopProps) => {
   return (
-    <>
+    <Flex justify="space-between" mb="sm">
       <SearchInput />
-      <Flex gap="md" justify="flex-end">
+      <Flex gap="sm">
         <Tooltip label="Show Filter">
           <ActionIcon
             variant="light"
@@ -15,6 +19,7 @@ const ApplicationTableTop = () => {
             radius="xl"
             aria-label="Show Filter"
             color="grey"
+            onClick={onToggleFilter}
           >
             <IconFilter style={{ width: "70%", height: "70%" }} stroke={1.5} />
           </ActionIcon>
@@ -32,7 +37,7 @@ const ApplicationTableTop = () => {
           </ActionIcon>
         </Tooltip>
       </Flex>
-    </>
+    </Flex>
   );
 };
 
