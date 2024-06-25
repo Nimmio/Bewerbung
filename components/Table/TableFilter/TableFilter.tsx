@@ -12,30 +12,31 @@ const TableFilter = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const [filters, setFilters] = useState<Filter[]>(
-    JSON.parse(searchParams?.get("filter") || "")
+    searchParams?.get("filters")
+      ? JSON.parse(searchParams?.get("filters") as string)
+      : []
   );
-
 
   const handleNewFilter = (newFilter: Filter) => {
     const params = new URLSearchParams(searchParams);
-    if (filters.length === 0) params.set("filter", JSON.stringify([newFilter]));
-    else params.set("filter", JSON.stringify([...filters, newFilter]));
+    if (filters.length === 0)
+      params.set("filters", JSON.stringify([newFilter]));
+    else params.set("filters", JSON.stringify([...filters, newFilter]));
     setFilters([...filters, ...[newFilter]]);
     replace(`${pathname}?${params.toString()}`);
   };
-
 
   //TODO: implement
   const handleDeleteFilter = (index: number) => {
-    console.log(index)
-    return
     const params = new URLSearchParams(searchParams);
-    if () params.set("filter", JSON.stringify([newFilter]));
-    else params.set("filter", JSON.stringify([...urlFilter, newFilter]));
-    setFilters([...filters, ...[newFilter]]);
+    const newFilters = filters;
+    newFilters.splice(index, 1);
+    if (newFilters.length !== 0)
+      params.set("filters", JSON.stringify(newFilters));
+    else params.delete("filters");
+    setFilters(newFilters);
     replace(`${pathname}?${params.toString()}`);
   };
-
 
   return (
     <>
@@ -43,7 +44,10 @@ const TableFilter = () => {
       <Title order={3}>Filter:</Title>
 
       <TableFilterAdd onSave={(newFilter) => handleNewFilter(newFilter)} />
-      <TableFilterList filters={filters}  onDelete={(index => handleDeleteFilter(index))}/>
+      <TableFilterList
+        filters={filters}
+        onDelete={(index) => handleDeleteFilter(index)}
+      />
 
       <Divider mt="sm" />
     </>

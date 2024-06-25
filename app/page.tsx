@@ -1,5 +1,6 @@
 import ApplicationTable from "@/components/Table/ApplicationTable";
 import prisma from "@/utils/db";
+import { getQuery } from "@/utils/filter";
 
 export default async function Home({
   searchParams,
@@ -8,11 +9,13 @@ export default async function Home({
     search?: string;
     page?: string;
     limit?: string;
+    filters?: string;
   };
 }>) {
   const search = searchParams?.search || "";
   const page = parseInt(searchParams?.page || "1");
   const limit = parseInt(searchParams?.limit || "10");
+  const filter = searchParams?.filters ? JSON.parse(searchParams?.filters) : [];
 
   //TODO: Reduce Redudancy
 
@@ -27,6 +30,7 @@ export default async function Home({
           company: { contains: search },
         },
       ],
+      AND: getQuery(filter),
     },
   });
 
@@ -41,6 +45,7 @@ export default async function Home({
           company: { contains: search },
         },
       ],
+      AND: getQuery(filter),
     },
     take: limit,
     skip: (page - 1) * limit,
