@@ -27,6 +27,11 @@ enum HistoryType {
   ARCHIVED
 }
 
+enum Languages {
+  ENGLISH
+  GERMAN
+}
+
 model Application {
   id              Int      @id @default(autoincrement())
   createdAt       DateTime @default(now())
@@ -61,5 +66,5 @@ model Settings {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   defaultLimit  Int
-  
+  language      Languages
 }
