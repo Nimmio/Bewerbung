@@ -1,33 +1,23 @@
-# Todos
+- Main View
+- Bewerbung View
+- Companys
+- Settings
+- Admin View
 
-## Table
-
-- Loading Indicator
-
-- Date Filter
-
-- State Filter
-
-- Column Selector
-
-## Application View
-
-- Timeline per Application
-
-- Fix dayjs
-
-## Settings
-
-- Language Switch
-
-- Default Limit
-
-- Default Columns
-
-## Statistics
-
-- Statistics
-
-## Timeline
-
-- Timeline All
+- Data:
+  - Bewerbung:
+    - Company
+    - Position
+    - State
+    - Link
+    - send
+    - last Update
+  - Company
+    - Name
+    - City
+    - Street
+    - Postal
+    - Contact Person
+  - Settings
+    - How Long Message
+    - Dark Mode

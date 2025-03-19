@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "History" ALTER COLUMN "from" DROP NOT NULL,
-ALTER COLUMN "to" DROP NOT NULL;
