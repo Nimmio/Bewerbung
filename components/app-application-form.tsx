@@ -49,6 +49,8 @@ const AppAppliactionForm = (params: { application?: Application }) => {
 
   const user = useUser();
   const [sentDateVisiable, setSentDateVisiable] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,6 +87,7 @@ const AppAppliactionForm = (params: { application?: Application }) => {
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    setDisabled(true);
     if (!application?.id) {
       handleSave(values);
     } else {
@@ -226,7 +229,9 @@ const AppAppliactionForm = (params: { application?: Application }) => {
             )}
           />
         )}
-        <Button type="submit">Submit</Button>
+        <Button disabled={disabled} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

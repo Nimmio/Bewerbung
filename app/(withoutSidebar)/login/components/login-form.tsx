@@ -13,6 +13,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+
+import { authClient } from "@/lib/auth-client";
 import {
   Form,
   FormControl,
@@ -20,8 +22,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { authClient } from "@/lib/auth-client";
+} from "@/components/ui/form";
+import Link from "next/link";
+import { toast } from "sonner";
 
 //TODO: Better Schema and Messages
 
@@ -37,18 +40,25 @@ export function LoginForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "admin@admin.com",
-      password: "password123",
+      email: "",
+      password: "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const { email, password } = values;
-    authClient.signIn.email({
-      email,
-      password,
-      callbackURL: "/",
-    });
+    authClient.signIn.email(
+      {
+        email,
+        password,
+        callbackURL: "/",
+      },
+      {
+        onError: (ctx) => {
+          toast.message(ctx.error.message);
+        },
+      }
+    );
   }
 
   return (
@@ -107,7 +117,9 @@ export function LoginForm({
             </Form>
             <div className="text-center text-sm">
               Don&apos;t have an account?{" "}
-              <Button variant="link">Sign up</Button>
+              <Link href={"/signup"}>
+                <Button variant="link">Sign up</Button>
+              </Link>
             </div>
           </div>
         </CardContent>
