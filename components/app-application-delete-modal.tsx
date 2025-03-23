@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
-import Link from "next/link";
 import { deleteApplication } from "@/app/(withSidebar)/applications/actions";
 import { toast } from "sonner";
 

@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
-import { Application, PrismaClient, State, User } from "@prisma/client";
 import { faker } from "@faker-js/faker";
+import { Application, PrismaClient, State, User } from "./generated/client";
 const prisma = new PrismaClient();
 
 async function seedAdminUser() {

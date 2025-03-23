@@ -46,7 +46,9 @@ export function AppSidebarFooter() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={avatar} alt={name} asChild>
-                  <Image src={avatar} alt={name} width={32} height={32} />
+                  {avatar && (
+                    <Image src={avatar} alt={name} width={32} height={32} />
+                  )}
                 </AvatarImage>
                 <AvatarFallback className="rounded-lg"></AvatarFallback>
               </Avatar>
@@ -67,7 +69,9 @@ export function AppSidebarFooter() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage src={avatar} alt={name} asChild>
-                    <Image src={avatar} alt={name} width={32} height={32} />
+                    {avatar && (
+                      <Image src={avatar} alt={name} width={32} height={32} />
+                    )}
                   </AvatarImage>
                   <AvatarFallback className="rounded-lg"></AvatarFallback>
                 </Avatar>

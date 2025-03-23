@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import AppAppliactionForm from "./app-application-form";
-import { Application } from "@prisma/client";
+import { Application } from "@/prisma/generated/client";
 
 interface AppAppliactionModalParams {
   open: boolean;

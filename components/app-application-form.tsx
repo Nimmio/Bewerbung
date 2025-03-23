@@ -33,7 +33,7 @@ import {
 import { toast } from "sonner";
 import { redirect } from "next/navigation";
 import { useUser } from "@/context/UserContext";
-import { Application } from "@prisma/client";
+import { Application } from "@/prisma/generated/client";
 
 const formSchema = z.object({
   company: z.string().nonempty({ message: "Company cannot be empty" }),

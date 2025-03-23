@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Building, FileUser, Home, LucideIcon, Settings } from "lucide-react";
+import { FileUser, Home, LucideIcon, Settings } from "lucide-react";
 import Link from "next/link";
 import { AppSidebarFooter } from "./app-sidebar-footer";
 

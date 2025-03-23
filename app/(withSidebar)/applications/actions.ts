@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { Application } from "@prisma/client";
+import { Application } from "@/prisma/generated/client";
 
 export const saveApplication = async (
   newApplication: Omit<Application, "id" | "lastUpdate">

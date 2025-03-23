@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
-import { Application } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import AppDataTableControls from "@/components/app-data-table-controls";
+import { Application } from "@/prisma/generated/client";
 
 export const columns: ColumnDef<Application>[] = [
   {

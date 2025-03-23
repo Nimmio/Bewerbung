@@ -6,7 +6,7 @@ import { createContext, useContext, useState } from "react";
 const DefaultUser: IUser = { email: "", name: "", id: "" };
 const UserContext = createContext({
   user: DefaultUser,
-  updateUser: (user) => {},
+  updateUser: (user: IUser) => {},
 });
 
 export const UserProvider = ({
