@@ -1,11 +1,14 @@
 "use client";
 
-import { Application } from "@/lib/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ApplicationTable } from "./applicationTable/application-table";
 import { Button } from "./ui/button";
 import { Plus } from "lucide-react";
 import { AddApplicationDialog } from "./addApplicationDialog/add-application-dialog";
+import { Application } from "@/generated/prisma";
+import { useApplicationStore } from "@/provider/application-store-provider";
+import { useQueryString } from "@/hooks/use-query-string,";
+import { usePathname, useRouter } from "next/navigation";
 
 interface ApplicationsProps {
   applications: Application[];
@@ -14,6 +17,20 @@ interface ApplicationsProps {
 const Applications = (props: ApplicationsProps) => {
   const { applications } = props;
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const { orderBy, filter, search } = useApplicationStore((state) => state);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const createQueryString = useQueryString();
+
+  useEffect(() => {
+    router.push(
+      `${pathname}?${createQueryString(
+        "controls",
+        JSON.stringify({ orderBy, filter, search })
+      )}`
+    );
+  }, [orderBy, filter, search]);
 
   return (
     <div className="space-y-6">

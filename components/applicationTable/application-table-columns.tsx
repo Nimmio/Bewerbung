@@ -5,6 +5,7 @@ import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { StatusOptions } from "@/lib/status";
 import { Application, Status } from "@/generated/prisma";
 import StatusDropdown from "../statusDropdown/status-dropdown";
+import { useApplicationStore } from "@/provider/application-store-provider";
 
 interface getColumnsParams {
   onStatusChange: ({
@@ -19,14 +20,12 @@ interface getColumnsParams {
 
 const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
   const { onStatusChange, onView } = params;
+  const { setOrderBy, setFilter } = useApplicationStore((state) => state);
   return [
     {
       accessorKey: "jobTitle",
       header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => setOrderBy("jobTitle")}>
           Position
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -38,10 +37,7 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
     {
       accessorKey: "companyName",
       header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => setOrderBy("companyName")}>
           Company
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -51,10 +47,7 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
     {
       accessorKey: "applicationDate",
       header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <Button variant="ghost" onClick={() => setOrderBy("applicationDate")}>
           Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
@@ -73,6 +66,7 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
               status={Object.keys(StatusOptions) as Status[]}
               activeStatus={column.getFilterValue() as string}
               withAll
+              onChange={(newStatus) => setFilter(newStatus)}
               customTrigger={
                 <Button variant="ghost" className="flex items-center space-x-1">
                   <span>Status</span>
@@ -90,6 +84,12 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
           <StatusDropdown
             status={Object.keys(StatusOptions) as Status[]}
             activeStatus={status}
+            onChange={(newStatus) =>
+              onStatusChange({
+                id: row.original.id,
+                newStatus: newStatus as Status,
+              })
+            }
           />
         );
       },

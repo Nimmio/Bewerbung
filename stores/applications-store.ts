@@ -24,7 +24,11 @@ export const defaultInitState: ApplicationState = {
 };
 
 const getOrderBy = (newKey: string, state: ApplicationState): TOrderBy => {
-  if (state.filter && state.filter[0] === newKey && state.filter[1] === "desc")
+  if (
+    state.orderBy &&
+    state.orderBy[0] === newKey &&
+    state.orderBy[1] === "desc"
+  )
     return [newKey, "asc"];
   return [newKey, "desc"];
 };

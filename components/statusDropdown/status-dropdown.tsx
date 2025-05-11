@@ -5,8 +5,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { ChevronDown } from "lucide-react";
 import { Status } from "@/generated/prisma";
 import { Badge } from "../ui/badge";
 import { StatusOptions } from "@/lib/status";
@@ -16,13 +14,19 @@ interface StatusDropdownProps {
   withAll?: boolean;
   activeStatus: string;
   customTrigger?: ReactNode;
+  onChange: (newStatus: Status | "all") => void;
 }
 
 const StatusDropdown = (props: StatusDropdownProps) => {
-  const { status, withAll = false, activeStatus, customTrigger } = props;
-  console.log("activeStatus", activeStatus);
+  const {
+    status,
+    withAll = false,
+    activeStatus,
+    customTrigger,
+    onChange,
+  } = props;
   const handleChange = (status: Status | "all") => {
-    console.log("id", status);
+    onChange(status);
   };
 
   return (
