@@ -1,5 +1,6 @@
 import Applications from "@/components/applications";
-import { Application } from "@/lib/types";
+import { Application } from "@/generated/prisma";
+import prisma from "@/lib/prisma";
 
 const data: Application[] = [
   {
@@ -40,11 +41,13 @@ const data: Application[] = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const applications = await prisma.application.findMany();
+  console.log("applications", applications);
   return (
     <>
       <h1 className="text-3xl font-bold mb-10">Job Application Manager</h1>
-      <Applications data={data} />
+      <Applications applications={applications} />
     </>
   );
 }

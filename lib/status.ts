@@ -1,20 +1,60 @@
 import { Status } from "./types";
 
 export const StatusOptions: Status = {
-  pending: {
-    label: "Pending",
-    color: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100",
-  },
-  reviewed: {
-    label: "Reviewed",
-    color: "bg-blue-100 text-blue-800 hover:bg-blue-100",
-  },
-  accepted: {
-    label: "Accepted",
-    color: "bg-green-100 text-green-800 hover:bg-green-100",
-  },
-  rejected: {
+  Applied: {
     label: "Rejected",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  InterviewScheduled: {
+    label: "InterviewScheduled",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  Interviewed: {
+    label: "Interviewed",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  AssessmentScheduled: {
+    label: "AssessmentScheduled",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  AssessmentCompleted: {
+    label: "AssessmentCompleted",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  FollowedUp: {
+    label: "FollowedUp",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  OnHold: {
+    label: "OnHold",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  Rejected: {
+    label: "Rejected",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  OfferReceived: {
+    label: "OfferReceived",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  OfferAccepted: {
+    label: "OfferAccepted",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  OfferDeclined: {
+    label: "OfferDeclined",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  Withdrawn: {
+    label: "Withdrawn",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  Closed: {
+    label: "Closed",
+    color: "bg-red-100 text-red-800 hover:bg-red-100",
+  },
+  Ghosted: {
+    label: "Ghosted",
     color: "bg-red-100 text-red-800 hover:bg-red-100",
   },
 };

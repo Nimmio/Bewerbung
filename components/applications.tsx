@@ -8,11 +8,11 @@ import { Plus } from "lucide-react";
 import { AddApplicationDialog } from "./addApplicationDialog/add-application-dialog";
 
 interface ApplicationsProps {
-  data: Application[];
+  applications: Application[];
 }
 
 const Applications = (props: ApplicationsProps) => {
-  const { data } = props;
+  const { applications } = props;
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   return (
@@ -25,7 +25,7 @@ const Applications = (props: ApplicationsProps) => {
         </Button>
       </div>
       <ApplicationTable
-        applications={data}
+        applications={applications}
         onView={(id) => console.log("View application:", id)}
         onStatusChange={({ id, newStatus }) =>
           console.log(`Status Change - ID: ${id}, STATUS ${newStatus}`)

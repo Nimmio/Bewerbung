@@ -27,12 +27,12 @@ import ApplicationTableSearch from "./application-table-search";
 
 interface ApplicationTableProps {
   applications: Application[];
-  onView: (id: string) => void;
+  onView: (id: number) => void;
   onStatusChange: ({
     id,
     newStatus,
   }: {
-    id: string;
+    id: number;
     newStatus: Application["status"];
   }) => void;
 }

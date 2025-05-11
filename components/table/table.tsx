@@ -3,9 +3,9 @@ import { TableHeader, Table, TableRow, TableHead } from "../ui/table";
 
 interface tableProps {
   headerGroups: {
-    id: string;
+    id: number;
     headers: {
-      id: string;
+      id: number;
       isPlaceholder: boolean;
     }[];
   }[];

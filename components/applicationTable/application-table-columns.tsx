@@ -1,4 +1,3 @@
-import { Application } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "../ui/button";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
@@ -17,23 +16,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Application, Status } from "@/generated/prisma";
+import StatusDropdown from "../statusDropdown/status-dropdown";
 
 interface getColumnsParams {
   onStatusChange: ({
     id,
     newStatus,
   }: {
-    id: string;
+    id: number;
     newStatus: Application["status"];
   }) => void;
-  onView: (id: string) => void;
+  onView: (id: number) => void;
 }
 
 const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
   const { onStatusChange, onView } = params;
   return [
     {
-      accessorKey: "position",
+      accessorKey: "jobTitle",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -44,11 +45,11 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="font-medium">{row.getValue("position")}</div>
+        <div className="font-medium">{row.getValue("jobTitle")}</div>
       ),
     },
     {
-      accessorKey: "company",
+      accessorKey: "companyName",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -61,7 +62,7 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
     },
 
     {
-      accessorKey: "date",
+      accessorKey: "applicationDate",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -72,7 +73,7 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
         </Button>
       ),
       cell: ({ row }) => {
-        const date = new Date(row.getValue("date"));
+        const date = new Date(row.getValue("applicationDate"));
         return <div>{date.toLocaleDateString()}</div>;
       },
     },
@@ -81,66 +82,17 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
       header: ({ column }) => {
         return (
           <div className="flex items-center space-x-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+            <StatusDropdown
+              status={Object.keys(StatusOptions) as Status[]}
+              activeStatus={column.getFilterValue() as string}
+              withAll
+              customTrigger={
                 <Button variant="ghost" className="flex items-center space-x-1">
                   <span>Status</span>
                   <ChevronDown className="h-4 w-4" />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuCheckboxItem
-                  checked={!column.getFilterValue()}
-                  onCheckedChange={() => column.setFilterValue(undefined)}
-                >
-                  All Statuses
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={column.getFilterValue() === "pending"}
-                  onCheckedChange={() => column.setFilterValue("pending")}
-                >
-                  <Badge
-                    variant="outline"
-                    className={StatusOptions.pending.color}
-                  >
-                    {StatusOptions.pending.label}
-                  </Badge>
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={column.getFilterValue() === "reviewed"}
-                  onCheckedChange={() => column.setFilterValue("reviewed")}
-                >
-                  <Badge
-                    variant="outline"
-                    className={StatusOptions.reviewed.color}
-                  >
-                    {StatusOptions.reviewed.label}
-                  </Badge>
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={column.getFilterValue() === "accepted"}
-                  onCheckedChange={() => column.setFilterValue("accepted")}
-                >
-                  <Badge
-                    variant="outline"
-                    className={StatusOptions.accepted.color}
-                  >
-                    {StatusOptions.accepted.label}
-                  </Badge>
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  checked={column.getFilterValue() === "rejected"}
-                  onCheckedChange={() => column.setFilterValue("rejected")}
-                >
-                  <Badge
-                    variant="outline"
-                    className={StatusOptions.rejected.color}
-                  >
-                    {StatusOptions.rejected.label}
-                  </Badge>
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              }
+            />
           </div>
         );
       },
@@ -149,57 +101,10 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
         const { label, color } = StatusOptions[status];
 
         return (
-          <Select
-            defaultValue={status}
-            onValueChange={(value) =>
-              onStatusChange({
-                id: row.original.id,
-                newStatus: value as Application["status"],
-              })
-            }
-          >
-            <SelectTrigger className="w-[130px]">
-              <SelectValue>
-                <Badge variant="outline" className={color}>
-                  {label}
-                </Badge>
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="pending">
-                <Badge
-                  variant="outline"
-                  className={StatusOptions.pending.color}
-                >
-                  {StatusOptions.pending.label}
-                </Badge>
-              </SelectItem>
-              <SelectItem value="reviewed">
-                <Badge
-                  variant="outline"
-                  className={StatusOptions.reviewed.color}
-                >
-                  {StatusOptions.reviewed.label}
-                </Badge>
-              </SelectItem>
-              <SelectItem value="accepted">
-                <Badge
-                  variant="outline"
-                  className={StatusOptions.accepted.color}
-                >
-                  {StatusOptions.accepted.label}
-                </Badge>
-              </SelectItem>
-              <SelectItem value="rejected">
-                <Badge
-                  variant="outline"
-                  className={StatusOptions.rejected.color}
-                >
-                  {StatusOptions.rejected.label}
-                </Badge>
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <StatusDropdown
+            status={Object.keys(StatusOptions) as Status[]}
+            activeStatus={"Applied"}
+          />
         );
       },
     },
