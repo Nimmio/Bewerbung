@@ -1,92 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-  output   = "./generated/client"
-  binaryTargets = ["native", "linux-arm64-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
-}
-
-model User {
-  id            String        @id
-  name          String
-  email         String
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
-  applications  Application[]
-
-  @@unique([email])
-  @@map("user")
-}
-
-model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String
-  createdAt DateTime
-  updatedAt DateTime
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([token])
-  @@map("session")
-}
-
-model Account {
-  id                    String    @id
-  accountId             String
-  providerId            String
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime
-  updatedAt             DateTime
-
-  @@map("account")
-}
-
-model Verification {
-  id         String    @id
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime?
-  updatedAt  DateTime?
-
-  @@map("verification")
-}
-
 model Application {
-  id         Int       @id @default(autoincrement())
-  user       User      @relation(fields: [userId], references: [id])
-  userId     String
-  company    String
-  location   String?
-  position   String
-  state      State
-  link       String?
-  sendDate   DateTime?
-  lastUpdate DateTime  @default(now())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @default(now()) @db.Timestamp(6)
+
+  jobTitle               String    @db.VarChar(255)
+  status                 Status
+  companyName            String?   @db.VarChar(255)
+  companyLocation        String?   @db.VarChar(255)
+  applicationDate        DateTime? @db.Timestamp(6)
+  applicationMethod      String    @default("E-Mail")
+  link                   String?   @db.VarChar(255)
+  contactPerson          String?   @db.VarChar(255)
+  contactEmail           String?   @db.VarChar(255)
+  notes                  String?   @db.VarChar(255)
+  expectedSalary         String?   @db.VarChar(255)
+  dateOfLastStatusUpdate DateTime? @db.Timestamp(6)
+
+  //Next Action Required: What is the next step you need to take? (e.g., "Prepare for Interview," "Send Thank You Note," "Follow Up").
+  //Next Action Due Date: Deadline for the next action.
 }
 
-enum State {
-  PLANNED
-  SENT
-  TALK
-  WAITING
-  DECLINED
+enum Status {
+  Applied
+  InterviewScheduled
+  Interviewed
+  AssessmentScheduled
+  AssessmentCompleted
+  FollowedUp
+  OnHold
+  Rejected
+  OfferReceived
+  OfferAccepted
+  OfferDeclined
+  Withdrawn
+  Closed
+  Ghosted
 }
