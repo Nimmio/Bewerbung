@@ -1,18 +1,32 @@
-import { Application } from "@/lib/types";
+import { Status } from "@/generated/prisma";
 import { createStore } from "zustand/vanilla";
 
+type TOrderBy = [key: string, dir: "asc" | "desc"];
+
 export type ApplicationState = {
-  applications: Application[];
+  orderBy?: TOrderBy;
+  search?: string;
+  filter?: Status | "all";
 };
 
 export type ApplicationActions = {
-  setApplications: (newApplications: Application[]) => void;
+  setOrderBy: (newKey: string) => void;
+  setSearch: (newSearch: string) => void;
+  setFilter: (newFilter: Status | "all") => void;
 };
 
 export type ApplicationStore = ApplicationState & ApplicationActions;
 
 export const defaultInitState: ApplicationState = {
-  applications: [],
+  orderBy: undefined,
+  search: undefined,
+  filter: "all",
+};
+
+const getOrderBy = (newKey: string, state: ApplicationState): TOrderBy => {
+  if (state.filter && state.filter[0] === newKey && state.filter[1] === "desc")
+    return [newKey, "asc"];
+  return [newKey, "desc"];
 };
 
 export const createApplicationStore = (
@@ -20,7 +34,9 @@ export const createApplicationStore = (
 ) => {
   return createStore<ApplicationStore>()((set) => ({
     ...initState,
-    setApplications: (newApplications) =>
-      set(() => ({ applications: newApplications })),
+    setOrderBy: (newKey) =>
+      set((state) => ({ orderBy: getOrderBy(newKey, state) })),
+    setSearch: (newSearch) => set(() => ({ search: newSearch })),
+    setFilter: (newFilter) => set(() => ({ filter: newFilter })),
   }));
 };

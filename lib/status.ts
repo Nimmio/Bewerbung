@@ -2,59 +2,59 @@ import { Status } from "./types";
 
 export const StatusOptions: Status = {
   Applied: {
-    label: "Rejected",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "Applied",
+    color: "bg-gray-100 text-gray-800 hover:bg-gray-200",
   },
   InterviewScheduled: {
-    label: "InterviewScheduled",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "Interview scheduled",
+    color: "bg-blue-100 text-blue-800 hover:bg-blue-200",
   },
   Interviewed: {
     label: "Interviewed",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    color: "bg-blue-100 text-blue-800 hover:bg-blue-200",
   },
   AssessmentScheduled: {
-    label: "AssessmentScheduled",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "Assessment scheduled",
+    color: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
   },
   AssessmentCompleted: {
-    label: "AssessmentCompleted",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "Assessment completed",
+    color: "bg-blue-100 text-blue-800 hover:bg-blue-200",
   },
   FollowedUp: {
-    label: "FollowedUp",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "Followed up",
+    color: "bg-blue-100 text-blue-800 hover:bg-blue-200",
   },
   OnHold: {
-    label: "OnHold",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "On hold",
+    color: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
   },
   Rejected: {
     label: "Rejected",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    color: "bg-red-100 text-red-800 hover:bg-red-200",
   },
   OfferReceived: {
-    label: "OfferReceived",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "Offer received",
+    color: "bg-green-100 text-green-800 hover:bg-green-200",
   },
   OfferAccepted: {
-    label: "OfferAccepted",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "Offer accepted",
+    color: "bg-green-200 text-green-900 hover:bg-green-300",
   },
   OfferDeclined: {
-    label: "OfferDeclined",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    label: "Offer declined",
+    color: "bg-orange-100 text-orange-800 hover:bg-orange-200",
   },
   Withdrawn: {
     label: "Withdrawn",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    color: "bg-gray-100 text-gray-800 hover:bg-gray-200",
   },
   Closed: {
     label: "Closed",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    color: "bg-teal-100 text-teal-800 hover:bg-teal-200",
   },
   Ghosted: {
     label: "Ghosted",
-    color: "bg-red-100 text-red-800 hover:bg-red-100",
+    color: "bg-gray-400 text-gray-900 hover:bg-gray-500",
   },
 };

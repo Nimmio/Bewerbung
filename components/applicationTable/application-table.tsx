@@ -20,10 +20,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Application } from "@/lib/types";
 
 import getColumns from "./application-table-columns";
 import ApplicationTableSearch from "./application-table-search";
+import { Application } from "@/generated/prisma";
 
 interface ApplicationTableProps {
   applications: Application[];
@@ -67,9 +67,9 @@ export function ApplicationTable({
   return (
     <div>
       <ApplicationTableSearch
-        value={(table.getColumn("position")?.getFilterValue() as string) ?? ""}
+        value={(table.getColumn("jobTitle")?.getFilterValue() as string) ?? ""}
         onChange={(newValue) =>
-          table.getColumn("position")?.setFilterValue(newValue)
+          table.getColumn("jobTitle")?.setFilterValue(newValue)
         }
       />
       <div className="rounded-md border">

@@ -1,21 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "../ui/button";
 import { ArrowUpDown, ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Badge } from "../ui/badge";
+
 import { StatusOptions } from "@/lib/status";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { Application, Status } from "@/generated/prisma";
 import StatusDropdown from "../statusDropdown/status-dropdown";
 
@@ -98,12 +85,11 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
       },
       cell: ({ row }) => {
         const status = row.getValue("status") as Application["status"];
-        const { label, color } = StatusOptions[status];
 
         return (
           <StatusDropdown
             status={Object.keys(StatusOptions) as Status[]}
-            activeStatus={"Applied"}
+            activeStatus={status}
           />
         );
       },
