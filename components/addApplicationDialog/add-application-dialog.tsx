@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -29,7 +30,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import type { Application } from "@/lib/types";
+import { Application } from "@/generated/prisma";
 
 interface AddApplicationDialogProps {
   open: boolean;
@@ -42,43 +43,69 @@ export function AddApplicationDialog({
   onOpenChange,
   onAdd,
 }: AddApplicationDialogProps) {
-  const [position, setPosition] = useState("");
-  const [company, setCompany] = useState("");
-  const [applicant, setApplicant] = useState("");
-  const [email, setEmail] = useState("");
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [jobTitle, setJobTitle] = useState("");
   const [status, setStatus] = useState<Application["status"]>("pending");
+  const [companyName, setCompanyName] = useState("");
+  const [companyLocation, setCompanyLocation] = useState("");
+  const [applicationDate, setApplicationDate] = useState<Date>(
+    new Date()
+  );
+  const [applicationMethod, setApplicationMethod] = useState("");
+  const [link, setLink] = useState("");
+  const [contactPerson, setContactPerson] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
   const [notes, setNotes] = useState("");
+  const [expectedSalary, setExpectedSalary] = useState("");
 
   const handleSubmit = () => {
-    if (!position || !company || !applicant || !date) {
+    if (!jobTitle || !companyName || !applicationDate) {
       return;
     }
 
     onAdd({
-      position,
-      company,
-      email,
-      date: date.toISOString().split("T")[0],
+      jobTitle,
       status,
+      companyName,
+      companyLocation,
+      applicationDate: applicationDate
+      applicationMethod,
+      link,
+      contactPerson,
+      contactEmail,
       notes,
+      expectedSalary,
     });
 
     // Reset form
-    setPosition("");
-    setCompany("");
-    setApplicant("");
-    setEmail("");
-    setDate(new Date());
-    setStatus("pending");
+    setJobTitle("");
+    setStatus("Applied");
+    setCompanyName("");
+    setCompanyLocation("");
+    setApplicationDate(new Date());
+    setApplicationMethod("");
+    setLink("");
+    setContactPerson("");
+    setContactEmail("");
     setNotes("");
+    setExpectedSalary("");
 
     onOpenChange(false);
   };
 
+  const applicationMethods = [
+    "Company Website",
+    "LinkedIn",
+    "Indeed",
+    "Referral",
+    "Email",
+    "Job Board",
+    "Recruiter",
+    "Other",
+  ];
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[525px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Application</DialogTitle>
           <DialogDescription>
@@ -87,75 +114,143 @@ export function AddApplicationDialog({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="position" className="text-right">
-              Position
+            <Label htmlFor="jobTitle" className="text-right">
+              Job Title
             </Label>
             <Input
-              id="position"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
+              id="jobTitle"
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
               className="col-span-3"
             />
           </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="company" className="text-right">
-              Company
+            <Label htmlFor="companyName" className="text-right">
+              Company Name
             </Label>
             <Input
-              id="company"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
+              id="companyName"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
               className="col-span-3"
             />
           </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="applicant" className="text-right">
-              Applicant
+            <Label htmlFor="companyLocation" className="text-right">
+              Company Location
             </Label>
             <Input
-              id="applicant"
-              value={applicant}
-              onChange={(e) => setApplicant(e.target.value)}
+              id="companyLocation"
+              value={companyLocation}
+              onChange={(e) => setCompanyLocation(e.target.value)}
               className="col-span-3"
+              placeholder="City, State or Remote"
             />
           </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right">
-              Email
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">Date</Label>
+            <Label className="text-right">Application Date</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
                   className={cn(
                     "col-span-3 justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
+                    !applicationDate && "text-muted-foreground"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  {applicationDate ? (
+                    format(applicationDate, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={date}
-                  onSelect={setDate}
+                  selected={applicationDate}
+                  onSelect={setApplicationDate}
                   initialFocus
                 />
               </PopoverContent>
             </Popover>
           </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label className="text-right">Application Method</Label>
+            <Select
+              value={applicationMethod}
+              onValueChange={setApplicationMethod}
+            >
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Select method" />
+              </SelectTrigger>
+              <SelectContent>
+                {applicationMethods.map((method) => (
+                  <SelectItem key={method} value={method}>
+                    {method}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="link" className="text-right">
+              Job Link
+            </Label>
+            <Input
+              id="link"
+              type="url"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              className="col-span-3"
+              placeholder="https://..."
+            />
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="contactPerson" className="text-right">
+              Contact Person
+            </Label>
+            <Input
+              id="contactPerson"
+              value={contactPerson}
+              onChange={(e) => setContactPerson(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="contactEmail" className="text-right">
+              Contact Email
+            </Label>
+            <Input
+              id="contactEmail"
+              type="email"
+              value={contactEmail}
+              onChange={(e) => setContactEmail(e.target.value)}
+              className="col-span-3"
+            />
+          </div>
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="expectedSalary" className="text-right">
+              Expected Salary
+            </Label>
+            <Input
+              id="expectedSalary"
+              value={expectedSalary}
+              onChange={(e) => setExpectedSalary(e.target.value)}
+              className="col-span-3"
+              placeholder="e.g. $80,000 - $100,000"
+            />
+          </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
             <Label className="text-right">Status</Label>
             <Select
@@ -175,6 +270,7 @@ export function AddApplicationDialog({
               </SelectContent>
             </Select>
           </div>
+
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="notes" className="text-right">
               Notes

@@ -12,12 +12,15 @@ import { usePathname, useRouter } from "next/navigation";
 
 interface ApplicationsProps {
   applications: Application[];
+  applicationsCount: number;
 }
 
 const Applications = (props: ApplicationsProps) => {
-  const { applications } = props;
+  const { applications, applicationsCount } = props;
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const { orderBy, filter, search } = useApplicationStore((state) => state);
+  const { orderBy, filter, search, page, perPage } = useApplicationStore(
+    (state) => state
+  );
 
   const router = useRouter();
   const pathname = usePathname();
@@ -27,10 +30,10 @@ const Applications = (props: ApplicationsProps) => {
     router.push(
       `${pathname}?${createQueryString(
         "controls",
-        JSON.stringify({ orderBy, filter, search })
+        JSON.stringify({ orderBy, filter, search, page, perPage })
       )}`
     );
-  }, [orderBy, filter, search]);
+  }, [orderBy, filter, search, page, perPage]);
 
   return (
     <div className="space-y-6">
@@ -43,6 +46,7 @@ const Applications = (props: ApplicationsProps) => {
       </div>
       <ApplicationTable
         applications={applications}
+        applicationsCount={applicationsCount}
         onView={(id) => console.log("View application:", id)}
         onStatusChange={({ id, newStatus }) =>
           console.log(`Status Change - ID: ${id}, STATUS ${newStatus}`)

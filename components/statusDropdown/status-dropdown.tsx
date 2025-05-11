@@ -46,7 +46,7 @@ const StatusDropdown = (props: StatusDropdownProps) => {
       <DropdownMenuContent align="start">
         {withAll && (
           <DropdownMenuCheckboxItem
-            checked={activeStatus === "All"}
+            checked={activeStatus === "all"}
             onCheckedChange={() => handleChange("all")}
           >
             All Statuses

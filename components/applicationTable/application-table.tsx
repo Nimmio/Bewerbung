@@ -1,14 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  type ColumnFiltersState,
-  type SortingState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -24,9 +19,19 @@ import {
 import getColumns from "./application-table-columns";
 import ApplicationTableSearch from "./application-table-search";
 import { Application } from "@/generated/prisma";
+import { useApplicationStore } from "@/provider/application-store-provider";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { getPagesCount } from "@/lib/table";
 
 interface ApplicationTableProps {
   applications: Application[];
+  applicationsCount: number;
   onView: (id: number) => void;
   onStatusChange: ({
     id,
@@ -37,13 +42,14 @@ interface ApplicationTableProps {
   }) => void;
 }
 
+const pageSizeOptions = [20, 50, 100];
+
 export function ApplicationTable({
   applications,
   onView,
   onStatusChange,
+  applicationsCount,
 }: ApplicationTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const columns = getColumns({
     onStatusChange,
     onView,
@@ -52,25 +58,39 @@ export function ApplicationTable({
   const table = useReactTable({
     data: applications,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      sorting,
-      columnFilters,
-    },
   });
+  const {
+    setSearch,
+    search,
+    decreasePage,
+    increasePage,
+    page,
+    setPerPage,
+    perPage,
+    setPage,
+  } = useApplicationStore((state) => state);
+
+  const [pages, setPages] = useState(1);
+  useEffect(() => {
+    const pagesCount = getPagesCount({
+      entrysCount: applicationsCount,
+      perPage: perPage || 20,
+    });
+    setPages(pagesCount);
+    if (page && page > pagesCount) {
+      setPage(pagesCount);
+    }
+    return () => {
+      setPages(1);
+    };
+  }, [applicationsCount, perPage]);
 
   return (
     <div>
       <ApplicationTableSearch
-        value={(table.getColumn("jobTitle")?.getFilterValue() as string) ?? ""}
-        onChange={(newValue) =>
-          table.getColumn("jobTitle")?.setFilterValue(newValue)
-        }
+        value={search || ""}
+        onChange={(newValue) => setSearch(newValue)}
       />
       <div className="rounded-md border">
         <Table>
@@ -122,23 +142,48 @@ export function ApplicationTable({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+      <div className="flex items-center justify-between space-x-2 py-4">
+        <div className="flex items-center space-x-2">
+          <span className="text-sm text-muted-foreground">Rows per page</span>
+          <Select
+            value={perPage?.toString()}
+            onValueChange={(value) => {
+              setPerPage(+value);
+            }}
+          >
+            <SelectTrigger className="h-8 w-[70px]">
+              <SelectValue placeholder={perPage} />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {pageSizeOptions.map((size) => (
+                <SelectItem key={size} value={size.toString()}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => decreasePage()}
+            disabled={page === 1}
+          >
+            Previous
+          </Button>
+          <div className="text-sm text-muted-foreground">
+            Page {page} of {pages}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => increasePage()}
+            disabled={page === pages}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );

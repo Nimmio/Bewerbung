@@ -20,11 +20,13 @@ interface getColumnsParams {
 
 const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
   const { onStatusChange, onView } = params;
-  const { setOrderBy, setFilter } = useApplicationStore((state) => state);
+  const { setOrderBy, setFilter, filter } = useApplicationStore(
+    (state) => state
+  );
   return [
     {
       accessorKey: "jobTitle",
-      header: ({ column }) => (
+      header: () => (
         <Button variant="ghost" onClick={() => setOrderBy("jobTitle")}>
           Position
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -36,7 +38,7 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
     },
     {
       accessorKey: "companyName",
-      header: ({ column }) => (
+      header: () => (
         <Button variant="ghost" onClick={() => setOrderBy("companyName")}>
           Company
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -46,7 +48,7 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
 
     {
       accessorKey: "applicationDate",
-      header: ({ column }) => (
+      header: () => (
         <Button variant="ghost" onClick={() => setOrderBy("applicationDate")}>
           Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -59,12 +61,12 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
     },
     {
       accessorKey: "status",
-      header: ({ column }) => {
+      header: () => {
         return (
           <div className="flex items-center space-x-2">
             <StatusDropdown
               status={Object.keys(StatusOptions) as Status[]}
-              activeStatus={column.getFilterValue() as string}
+              activeStatus={filter || "All"}
               withAll
               onChange={(newStatus) => setFilter(newStatus)}
               customTrigger={
