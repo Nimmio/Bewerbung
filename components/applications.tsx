@@ -56,9 +56,6 @@ const Applications = (props: ApplicationsProps) => {
         applications={applications}
         applicationsCount={applicationsCount}
         onView={(id) => console.log("View application:", id)}
-        onStatusChange={({ id, newStatus }) =>
-          console.log(`Status Change - ID: ${id}, STATUS ${newStatus}`)
-        }
       />
       <AddApplicationDialog
         open={isAddDialogOpen}

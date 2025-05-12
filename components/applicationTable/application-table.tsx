@@ -33,13 +33,6 @@ interface ApplicationTableProps {
   applications: Application[];
   applicationsCount: number;
   onView: (id: number) => void;
-  onStatusChange: ({
-    id,
-    newStatus,
-  }: {
-    id: number;
-    newStatus: Application["status"];
-  }) => void;
 }
 
 const pageSizeOptions = [20, 50, 100];
@@ -47,11 +40,9 @@ const pageSizeOptions = [20, 50, 100];
 export function ApplicationTable({
   applications,
   onView,
-  onStatusChange,
   applicationsCount,
 }: ApplicationTableProps) {
   const columns = getColumns({
-    onStatusChange,
     onView,
   });
 

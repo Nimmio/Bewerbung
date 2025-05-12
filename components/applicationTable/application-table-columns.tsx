@@ -6,20 +6,14 @@ import { StatusOptions } from "@/lib/status";
 import { Application, Status } from "@/generated/prisma";
 import StatusDropdown from "../statusDropdown/status-dropdown";
 import { useApplicationStore } from "@/provider/application-store-provider";
+import { Badge } from "../ui/badge";
 
 interface getColumnsParams {
-  onStatusChange: ({
-    id,
-    newStatus,
-  }: {
-    id: number;
-    newStatus: Application["status"];
-  }) => void;
   onView: (id: number) => void;
 }
 
 const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
-  const { onStatusChange, onView } = params;
+  const { onView } = params;
   const { setOrderBy, setFilter, filter } = useApplicationStore(
     (state) => state
   );
@@ -83,16 +77,9 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
         const status = row.getValue("status") as Application["status"];
 
         return (
-          <StatusDropdown
-            status={Object.keys(StatusOptions) as Status[]}
-            activeStatus={status}
-            onChange={(newStatus) =>
-              onStatusChange({
-                id: row.original.id,
-                newStatus: newStatus as Status,
-              })
-            }
-          />
+          <Badge variant="outline" className={StatusOptions[status].color}>
+            {StatusOptions[status].label}
+          </Badge>
         );
       },
     },
