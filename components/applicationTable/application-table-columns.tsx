@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "../ui/button";
-import { ArrowUpDown, ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown, ExternalLink } from "lucide-react";
 
 import { StatusOptions } from "@/lib/status";
 import { Application, Status } from "@/generated/prisma";
@@ -80,6 +80,25 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
           <Badge variant="outline" className={StatusOptions[status].color}>
             {StatusOptions[status].label}
           </Badge>
+        );
+      },
+    },
+    {
+      id: "link",
+      header: "Link",
+      cell: ({ row }) => {
+        const link = row.original.link;
+        if (!link) return null;
+
+        return (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800"
+          >
+            <ExternalLink className="h-4 w-4" />
+          </a>
         );
       },
     },

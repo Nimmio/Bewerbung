@@ -11,6 +11,7 @@ import { useQueryString } from "@/hooks/use-query-string,";
 import { usePathname, useRouter } from "next/navigation";
 import { createApplication } from "@/lib/application";
 import { TCreateApplication } from "@/lib/types";
+import { ViewApplicationDialog } from "./viewApplicationDialog/view-application-dialog";
 
 interface ApplicationsProps {
   applications: Application[];
@@ -22,6 +23,13 @@ const Applications = (props: ApplicationsProps) => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const { orderBy, filter, search, page, perPage } = useApplicationStore(
     (state) => state
+  );
+  const [viewApplication, setViewApplication] = useState<Application | null>(
+    null
+  );
+
+  const [editApplication, setEditApplication] = useState<Application | null>(
+    null
   );
 
   const router = useRouter();
@@ -42,6 +50,21 @@ const Applications = (props: ApplicationsProps) => {
       setIsAddDialogOpen(false);
     });
   };
+  const handleView = (id: number) => {
+    const applicationToView = applications.find(
+      (application) => application.id === id
+    );
+    if (applicationToView) {
+      setViewApplication(applicationToView);
+    } else {
+      setViewApplication(null);
+    }
+  };
+
+  const handleViewEditButtonClick = () => {
+    setEditApplication(viewApplication);
+    setViewApplication(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -55,7 +78,7 @@ const Applications = (props: ApplicationsProps) => {
       <ApplicationTable
         applications={applications}
         applicationsCount={applicationsCount}
-        onView={(id) => console.log("View application:", id)}
+        onView={(id) => handleView(id)}
       />
       <AddApplicationDialog
         open={isAddDialogOpen}
@@ -64,6 +87,18 @@ const Applications = (props: ApplicationsProps) => {
           handleAdd(createApplicationData);
         }}
       />
+      {viewApplication && (
+        <ViewApplicationDialog
+          application={viewApplication}
+          open={viewApplication !== null}
+          onOpenChange={(open) => {
+            if (!open) {
+              setViewApplication(null);
+            }
+          }}
+          onEditButtonCLick={() => handleViewEditButtonClick()}
+        />
+      )}
     </div>
   );
 };

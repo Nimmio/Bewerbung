@@ -29,6 +29,7 @@ import { format } from "date-fns";
 import { Calendar } from "../ui/calendar";
 import { createApplication } from "@/lib/application";
 import { TCreateApplication } from "@/lib/types";
+import { Textarea } from "../ui/textarea";
 
 const formSchema = z.object({
   jobTitle: z.string().min(2).max(255),
@@ -298,19 +299,6 @@ const AddApplicationDialogForm = (props: AddApplicationDialogFormProps) => {
         />
         <FormField
           control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="expectedSalary"
           render={({ field }) => (
             <FormItem>
@@ -322,6 +310,20 @@ const AddApplicationDialogForm = (props: AddApplicationDialogFormProps) => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Textarea className="resize-none" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit">Submit</Button>
       </form>
     </Form>
