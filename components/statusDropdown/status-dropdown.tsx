@@ -29,20 +29,18 @@ const StatusDropdown = (props: StatusDropdownProps) => {
     onChange(status);
   };
 
+  const getTrigger = () => {
+    if (customTrigger) return customTrigger;
+    return (
+      <Badge variant="outline" className={StatusOptions[activeStatus].color}>
+        {StatusOptions[activeStatus].label}
+      </Badge>
+    );
+  };
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        {customTrigger ? (
-          customTrigger
-        ) : (
-          <Badge
-            variant="outline"
-            className={StatusOptions[activeStatus].color}
-          >
-            {StatusOptions[activeStatus].label}
-          </Badge>
-        )}
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{getTrigger()}</DropdownMenuTrigger>
       <DropdownMenuContent align="start">
         {withAll && (
           <DropdownMenuCheckboxItem

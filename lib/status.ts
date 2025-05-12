@@ -58,3 +58,5 @@ export const StatusOptions: Status = {
     color: "bg-gray-400 text-gray-900 hover:bg-gray-500",
   },
 };
+
+export const StatusOptionsKeysArray: string[] = Object.keys(StatusOptions);

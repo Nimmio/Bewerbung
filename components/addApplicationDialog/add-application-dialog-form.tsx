@@ -1,0 +1,314 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { StatusOptions } from "@/lib/status";
+import { Status } from "@/generated/prisma";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { Calendar } from "../ui/calendar";
+
+const formSchema = z.object({
+  jobTitle: z.string().min(2).max(255),
+  status: z.enum([
+    "Applied",
+    "InterviewScheduled",
+    "Interviewed",
+    "AssessmentScheduled",
+    "AssessmentCompleted",
+    "FollowedUp",
+    "OnHold",
+    "Rejected",
+    "OfferReceived",
+    "OfferAccepted",
+    "OfferDeclined",
+    "Withdrawn",
+    "Closed",
+    "Ghosted",
+  ]),
+  companyName: z.string().min(2).max(255),
+  companyLocation: z.string().max(255).optional(),
+  applicationDate: z.date().optional(),
+  applicationMethod: z
+    .enum([
+      "Company Website",
+      "LinkedIn",
+      "Indeed",
+      "Referral",
+      "Email",
+      "Job Board",
+      "Recruiter",
+      "Other",
+    ])
+    .optional(),
+  link: z.string().url().optional(),
+  contactPerson: z.string().max(255).optional(),
+  contactEmail: z.string().email().max(255).optional(),
+  notes: z.string().optional(),
+  expectedSalary: z.string().max(255).optional(),
+});
+
+const AddApplicationDialogForm = () => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      jobTitle: "",
+      status: "Applied",
+      companyName: "",
+      companyLocation: "",
+      applicationDate: new Date(),
+      applicationMethod: "Company Website",
+      link: "",
+      contactPerson: "",
+      contactEmail: "",
+      notes: "",
+      expectedSalary: "",
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
+  }
+  const [popoverOpen, setpopoverOpen] = useState(false);
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="jobTitle"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Job Title</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {Object.keys(StatusOptions).map((StatusOptionKey) => (
+                    <SelectItem key={StatusOptionKey} value={StatusOptionKey}>
+                      {StatusOptions[StatusOptionKey].label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="companyName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="companyLocation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company Location</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="applicationDate"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Application Date</FormLabel>
+                <FormControl>
+                  <Popover
+                    open={popoverOpen}
+                    onOpenChange={(open) => {
+                      setpopoverOpen(open);
+                    }}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "col-span-3 justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={(value) => {
+                          field.onChange(value);
+                          setpopoverOpen(false);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
+          name="applicationMethod"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Application Method</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {[
+                    "Company Website",
+                    "LinkedIn",
+                    "Indeed",
+                    "Referral",
+                    "Email",
+                    "Job Board",
+                    "Recruiter",
+                    "Other",
+                  ].map((appliedMethod) => (
+                    <SelectItem key={appliedMethod} value={appliedMethod}>
+                      {appliedMethod}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="link"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Link</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="contactPerson"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contact Person</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="contactEmail"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contact Email</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="notes"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Notes</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="expectedSalary"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Expected Salary</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+};
+
+export default AddApplicationDialogForm;

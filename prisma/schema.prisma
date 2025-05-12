@@ -25,10 +25,10 @@ model Application {
   companyLocation        String?   @db.VarChar(255)
   applicationDate        DateTime? @db.Timestamp(6)
   applicationMethod      String    @default("E-Mail")
-  link                   String?   @db.VarChar(255)
+  link                   String?   @db.Text
   contactPerson          String?   @db.VarChar(255)
   contactEmail           String?   @db.VarChar(255)
-  notes                  String?   @db.VarChar(255)
+  notes                  String?   @db.Text
   expectedSalary         String?   @db.VarChar(255)
   dateOfLastStatusUpdate DateTime? @db.Timestamp(6)
 
