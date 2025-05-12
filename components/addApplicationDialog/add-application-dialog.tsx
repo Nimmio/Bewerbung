@@ -11,7 +11,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -34,11 +33,13 @@ import {
 import { cn } from "@/lib/utils";
 import { Application } from "@/generated/prisma";
 import AddApplicationDialogForm from "./add-application-dialog-form";
+import { createApplication } from "@/lib/application";
+import { TCreateApplication } from "@/lib/types";
 
 interface AddApplicationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd: (application: Omit<Application, "id">) => void;
+  onAdd: (application: TCreateApplication) => void;
 }
 
 export function AddApplicationDialog({
@@ -55,7 +56,7 @@ export function AddApplicationDialog({
             Enter the details of the new job application.
           </DialogDescription>
         </DialogHeader>
-        <AddApplicationDialogForm />
+        <AddApplicationDialogForm onAdd={onAdd} />
       </DialogContent>
     </Dialog>
   );

@@ -1,5 +1,8 @@
+"use server";
+
 import { Application, Status } from "@/generated/prisma";
 import prisma from "./prisma";
+import { TCreateApplication } from "./types";
 
 const getWhere = (filter: Status | "all", search: string) => {
   const filterWhere =
@@ -97,4 +100,28 @@ export const getApplicatiosnCount = async (
   return await prisma.application.count({
     where: getWhere(filter, search),
   });
+};
+
+interface createApplicationParams {
+  newApplication: TCreateApplication;
+}
+
+interface createApplicationReturns {
+  savedApplication?: Application;
+  error?: unknown;
+}
+
+export const createApplication = async (
+  params: createApplicationParams
+): Promise<createApplicationReturns> => {
+  const { newApplication } = params;
+  try {
+    const savedApplication = await prisma.application.create({
+      data: newApplication,
+    });
+    return { savedApplication };
+  } catch (error) {
+    console.log("error");
+    return { error };
+  }
 };

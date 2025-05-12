@@ -27,6 +27,8 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "../ui/calendar";
+import { createApplication } from "@/lib/application";
+import { TCreateApplication } from "@/lib/types";
 
 const formSchema = z.object({
   jobTitle: z.string().min(2).max(255),
@@ -47,28 +49,32 @@ const formSchema = z.object({
     "Ghosted",
   ]),
   companyName: z.string().min(2).max(255),
-  companyLocation: z.string().max(255).optional(),
-  applicationDate: z.date().optional(),
-  applicationMethod: z
-    .enum([
-      "Company Website",
-      "LinkedIn",
-      "Indeed",
-      "Referral",
-      "Email",
-      "Job Board",
-      "Recruiter",
-      "Other",
-    ])
-    .optional(),
-  link: z.string().url().optional(),
+  companyLocation: z.optional(z.string().max(255)),
+  applicationDate: z.date(),
+  applicationMethod: z.enum([
+    "Company Website",
+    "LinkedIn",
+    "Indeed",
+    "Referral",
+    "Email",
+    "Job Board",
+    "Recruiter",
+    "Other",
+  ]),
+  link: z.union([z.literal(""), z.string().trim().url()]),
   contactPerson: z.string().max(255).optional(),
-  contactEmail: z.string().email().max(255).optional(),
+  contactEmail: z.union([z.literal(""), z.string().trim().email()]),
   notes: z.string().optional(),
   expectedSalary: z.string().max(255).optional(),
 });
 
-const AddApplicationDialogForm = () => {
+interface AddApplicationDialogFormProps {
+  onAdd: (createApplication: TCreateApplication) => void;
+}
+
+const AddApplicationDialogForm = (props: AddApplicationDialogFormProps) => {
+  const { onAdd } = props;
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -87,9 +93,20 @@ const AddApplicationDialogForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    onAdd({
+      jobTitle: values.jobTitle,
+      status: values.status,
+      companyName: values.companyName,
+      companyLocation: values.companyLocation || null,
+      applicationDate: values.applicationDate || null,
+      applicationMethod: values.applicationMethod,
+      link: values.link || null,
+      contactPerson: values.contactPerson || null,
+      contactEmail: values.contactEmail || null,
+      notes: values.notes || null,
+      expectedSalary: values.expectedSalary || null,
+      dateOfLastStatusUpdate: values.applicationDate || null,
+    });
   }
   const [popoverOpen, setpopoverOpen] = useState(false);
 

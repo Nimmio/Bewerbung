@@ -9,6 +9,8 @@ import { Application } from "@/generated/prisma";
 import { useApplicationStore } from "@/provider/application-store-provider";
 import { useQueryString } from "@/hooks/use-query-string,";
 import { usePathname, useRouter } from "next/navigation";
+import { createApplication } from "@/lib/application";
+import { TCreateApplication } from "@/lib/types";
 
 interface ApplicationsProps {
   applications: Application[];
@@ -35,6 +37,12 @@ const Applications = (props: ApplicationsProps) => {
     );
   }, [orderBy, filter, search, page, perPage]);
 
+  const handleAdd = (createApplicationData: TCreateApplication) => {
+    createApplication({ newApplication: createApplicationData }).then(() => {
+      setIsAddDialogOpen(false);
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -55,7 +63,9 @@ const Applications = (props: ApplicationsProps) => {
       <AddApplicationDialog
         open={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
-        onAdd={() => {}}
+        onAdd={(createApplicationData) => {
+          handleAdd(createApplicationData);
+        }}
       />
     </div>
   );
