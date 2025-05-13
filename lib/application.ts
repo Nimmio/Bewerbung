@@ -81,7 +81,7 @@ export const findApplications = async (
 
   return await prisma.application.findMany({
     take: perPage,
-    skip: page <= 0 ? (page - 1) * perPage : 0,
+    skip: page > 0 ? (page - 1) * perPage : 0,
     where: getWhere(filter, search),
     orderBy: {
       [orderBy[0]]: orderBy[1],
