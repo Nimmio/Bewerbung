@@ -9,7 +9,11 @@ import { Application } from "@/generated/prisma";
 import { useApplicationStore } from "@/provider/application-store-provider";
 import { useQueryString } from "@/hooks/use-query-string,";
 import { usePathname, useRouter } from "next/navigation";
-import { createApplication, updateApplication } from "@/lib/application";
+import {
+  createApplication,
+  deleteApplication,
+  updateApplication,
+} from "@/lib/application";
 import { TCreateApplication } from "@/lib/types";
 import { ViewApplicationDialog } from "./viewApplicationDialog/view-application-dialog";
 import EditApplicationDialog from "./editApplicationDialog/edit-application-dialog";
@@ -60,7 +64,7 @@ const Applications = (props: ApplicationsProps) => {
       setIsAddDialogOpen(false);
     });
   };
-  const handleView = (id: number) => {
+  const handleView = (id: Application["id"]) => {
     const applicationToView = applications.find(
       (application) => application.id === id
     );
@@ -71,7 +75,7 @@ const Applications = (props: ApplicationsProps) => {
     }
   };
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: Application["id"]) => {
     const applicationToEdit = applications.find(
       (application) => application.id === id
     );
@@ -82,6 +86,11 @@ const Applications = (props: ApplicationsProps) => {
     }
   };
 
+  const handleDelete = (id: Application["id"]) => {
+    if (id) {
+      deleteApplication({ applicationId: id });
+    }
+  };
   const handleViewEditButtonClick = () => {
     setEditApplication(viewApplication);
     setViewApplication(null);
@@ -107,6 +116,7 @@ const Applications = (props: ApplicationsProps) => {
         applicationsCount={applicationsCount}
         onView={(id) => handleView(id)}
         onEdit={(id) => handleEdit(id)}
+        onDelete={(id) => handleDelete(id)}
       />
       <AddApplicationDialog
         open={isAddDialogOpen}
