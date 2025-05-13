@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "ts": "tsc --noEmit --incremental",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate && prisma db push"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
