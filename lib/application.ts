@@ -3,6 +3,7 @@
 import { Application, Status } from "@/generated/prisma";
 import prisma from "./prisma";
 import { TCreateApplication } from "./types";
+import { revalidatePath } from "next/cache";
 
 const getWhere = (filter: Status | "all", search: string) => {
   const filterWhere =
@@ -119,9 +120,38 @@ export const createApplication = async (
     const savedApplication = await prisma.application.create({
       data: newApplication,
     });
+    revalidatePath("/");
     return { savedApplication };
   } catch (error) {
-    console.log("error");
+    console.log("error", error);
+    return { error };
+  }
+};
+
+interface updateApplicationParams {
+  application: Application;
+}
+
+interface updateApplicationReturns {
+  updatedApplication?: Application;
+  error?: unknown;
+}
+
+export const updateApplication = async (
+  params: updateApplicationParams
+): Promise<updateApplicationReturns> => {
+  const { application } = params;
+  try {
+    const updatedApplication = await prisma.application.update({
+      where: {
+        id: application.id,
+      },
+      data: application,
+    });
+    revalidatePath("/");
+    return { updatedApplication };
+  } catch (error) {
+    console.log("error", error);
     return { error };
   }
 };

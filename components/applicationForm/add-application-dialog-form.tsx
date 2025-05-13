@@ -5,7 +5,6 @@ import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,15 +20,14 @@ import {
   SelectValue,
 } from "../ui/select";
 import { StatusOptions } from "@/lib/status";
-import { Status } from "@/generated/prisma";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "../ui/calendar";
-import { createApplication } from "@/lib/application";
 import { TCreateApplication } from "@/lib/types";
 import { Textarea } from "../ui/textarea";
+import { Application } from "@/generated/prisma";
 
 const formSchema = z.object({
   jobTitle: z.string().min(2).max(255),
@@ -52,16 +50,7 @@ const formSchema = z.object({
   companyName: z.string().min(2).max(255),
   companyLocation: z.optional(z.string().max(255)),
   applicationDate: z.date(),
-  applicationMethod: z.enum([
-    "Company Website",
-    "LinkedIn",
-    "Indeed",
-    "Referral",
-    "Email",
-    "Job Board",
-    "Recruiter",
-    "Other",
-  ]),
+  applicationMethod: z.string(),
   link: z.union([z.literal(""), z.string().trim().url()]),
   contactPerson: z.string().max(255).optional(),
   contactEmail: z.union([z.literal(""), z.string().trim().email()]),
@@ -69,32 +58,33 @@ const formSchema = z.object({
   expectedSalary: z.string().max(255).optional(),
 });
 
-interface AddApplicationDialogFormProps {
-  onAdd: (createApplication: TCreateApplication) => void;
+interface ApplicationFormProps {
+  onFormSubmit: (application: TCreateApplication) => void;
+  editApplication?: Application;
 }
 
-const AddApplicationDialogForm = (props: AddApplicationDialogFormProps) => {
-  const { onAdd } = props;
+const ApplicationForm = (props: ApplicationFormProps) => {
+  const { onFormSubmit, editApplication } = props;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      jobTitle: "",
-      status: "Applied",
-      companyName: "",
-      companyLocation: "",
-      applicationDate: new Date(),
-      applicationMethod: "Company Website",
-      link: "",
-      contactPerson: "",
-      contactEmail: "",
-      notes: "",
-      expectedSalary: "",
+      jobTitle: editApplication?.jobTitle || "",
+      status: editApplication?.status || "Applied",
+      companyName: editApplication?.companyName || "",
+      companyLocation: editApplication?.companyLocation || "",
+      applicationDate: editApplication?.applicationDate || new Date(),
+      applicationMethod: editApplication?.applicationMethod || "None",
+      link: editApplication?.link || "",
+      contactPerson: editApplication?.contactPerson || "",
+      contactEmail: editApplication?.contactEmail || "",
+      notes: editApplication?.notes || "",
+      expectedSalary: editApplication?.expectedSalary || "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    onAdd({
+    onFormSubmit({
       jobTitle: values.jobTitle,
       status: values.status,
       companyName: values.companyName,
@@ -238,6 +228,7 @@ const AddApplicationDialogForm = (props: AddApplicationDialogFormProps) => {
                 </FormControl>
                 <SelectContent>
                   {[
+                    "None",
                     "Company Website",
                     "LinkedIn",
                     "Indeed",
@@ -330,4 +321,4 @@ const AddApplicationDialogForm = (props: AddApplicationDialogFormProps) => {
   );
 };
 
-export default AddApplicationDialogForm;
+export default ApplicationForm;

@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import getColumns from "./application-table-columns";
+import GetColumns from "./application-table-columns";
 import ApplicationTableSearch from "./application-table-search";
 import { Application } from "@/generated/prisma";
 import { useApplicationStore } from "@/provider/application-store-provider";
@@ -44,7 +44,7 @@ export function ApplicationTable({
   onEdit,
   applicationsCount,
 }: ApplicationTableProps) {
-  const columns = getColumns({
+  const columns = GetColumns({
     onView,
     onEdit,
   });
@@ -78,7 +78,7 @@ export function ApplicationTable({
     return () => {
       setPages(1);
     };
-  }, [applicationsCount, perPage]);
+  }, [applicationsCount, perPage, page, setPage]);
 
   return (
     <div>

@@ -7,20 +7,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { TCreateApplication } from "@/lib/types";
 import ApplicationForm from "../applicationForm/add-application-dialog-form";
+import { Application } from "@/generated/prisma";
+import { TCreateApplication } from "@/lib/types";
 
 interface AddApplicationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd: (application: TCreateApplication) => void;
+  onEditSubmit: (application: Application) => void;
+  editApplication: Application;
 }
 
-export function AddApplicationDialog({
-  open,
-  onOpenChange,
-  onAdd,
-}: AddApplicationDialogProps) {
+const EditApplicationDialog = (props: AddApplicationDialogProps) => {
+  const { open, onOpenChange, onEditSubmit, editApplication } = props;
+
+  const handleSubmit = (applicationValues: TCreateApplication) => {
+    onEditSubmit({
+      ...editApplication,
+      ...applicationValues,
+    });
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -30,8 +36,13 @@ export function AddApplicationDialog({
             Enter the details of the new job application.
           </DialogDescription>
         </DialogHeader>
-        <ApplicationForm onFormSubmit={onAdd} />
+        <ApplicationForm
+          onFormSubmit={(application) => handleSubmit(application)}
+          editApplication={editApplication}
+        />
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default EditApplicationDialog;

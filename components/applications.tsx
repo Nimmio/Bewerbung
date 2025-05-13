@@ -9,9 +9,10 @@ import { Application } from "@/generated/prisma";
 import { useApplicationStore } from "@/provider/application-store-provider";
 import { useQueryString } from "@/hooks/use-query-string,";
 import { usePathname, useRouter } from "next/navigation";
-import { createApplication } from "@/lib/application";
+import { createApplication, updateApplication } from "@/lib/application";
 import { TCreateApplication } from "@/lib/types";
 import { ViewApplicationDialog } from "./viewApplicationDialog/view-application-dialog";
+import EditApplicationDialog from "./editApplicationDialog/edit-application-dialog";
 
 interface ApplicationsProps {
   applications: Application[];
@@ -43,7 +44,16 @@ const Applications = (props: ApplicationsProps) => {
         JSON.stringify({ orderBy, filter, search, page, perPage })
       )}`
     );
-  }, [orderBy, filter, search, page, perPage]);
+  }, [
+    orderBy,
+    filter,
+    search,
+    page,
+    perPage,
+    createQueryString,
+    pathname,
+    router,
+  ]);
 
   const handleAdd = (createApplicationData: TCreateApplication) => {
     createApplication({ newApplication: createApplicationData }).then(() => {
@@ -75,6 +85,12 @@ const Applications = (props: ApplicationsProps) => {
   const handleViewEditButtonClick = () => {
     setEditApplication(viewApplication);
     setViewApplication(null);
+  };
+
+  const handleEditSubmit = (application: Application) => {
+    updateApplication({ application }).then(() => {
+      setEditApplication(null);
+    });
   };
 
   return (
@@ -109,6 +125,20 @@ const Applications = (props: ApplicationsProps) => {
             }
           }}
           onEditButtonCLick={() => handleViewEditButtonClick()}
+        />
+      )}
+      {editApplication && (
+        <EditApplicationDialog
+          open={editApplication !== null}
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditApplication(null);
+            }
+          }}
+          editApplication={editApplication}
+          onEditSubmit={(application) => {
+            handleEditSubmit(application);
+          }}
         />
       )}
     </div>

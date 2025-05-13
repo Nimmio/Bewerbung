@@ -8,12 +8,12 @@ import StatusDropdown from "../statusDropdown/status-dropdown";
 import { useApplicationStore } from "@/provider/application-store-provider";
 import { Badge } from "../ui/badge";
 
-interface getColumnsParams {
+interface GetColumnsParams {
   onView: (id: number) => void;
   onEdit: (id: number) => void;
 }
 
-const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
+const GetColumns = (params: GetColumnsParams): ColumnDef<Application>[] => {
   const { onView, onEdit } = params;
   const { setOrderBy, setFilter, filter } = useApplicationStore(
     (state) => state
@@ -118,4 +118,4 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
     },
   ];
 };
-export default getColumns;
+export default GetColumns;
