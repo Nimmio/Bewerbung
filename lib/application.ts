@@ -1,6 +1,6 @@
 "use server";
 
-import { Application, Status } from "@/generated/prisma";
+import { Application, Prisma, Status } from "@/generated/prisma";
 import prisma from "./prisma";
 import { TCreateApplication } from "./types";
 import { revalidatePath } from "next/cache";
@@ -20,37 +20,37 @@ const getWhere = (filter: Status | "all", search: string) => {
             {
               jobTitle: {
                 contains: search,
-                mode: "insensitive",
+                mode: Prisma.QueryMode.insensitive,
               },
             },
             {
               companyName: {
                 contains: search,
-                mode: "insensitive",
+                mode: Prisma.QueryMode.insensitive,
               },
             },
             {
               companyLocation: {
                 contains: search,
-                mode: "insensitive",
+                mode: Prisma.QueryMode.insensitive,
               },
             },
             {
               contactPerson: {
                 contains: search,
-                mode: "insensitive",
+                mode: Prisma.QueryMode.insensitive,
               },
             },
             {
               contactEmail: {
                 contains: search,
-                mode: "insensitive",
+                mode: Prisma.QueryMode.insensitive,
               },
             },
             {
               notes: {
                 contains: search,
-                mode: "insensitive",
+                mode: Prisma.QueryMode.insensitive,
               },
             },
           ],

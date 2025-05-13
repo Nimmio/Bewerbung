@@ -1,7 +1,7 @@
 import React from "react";
 import { TableHead, TableHeader, TableRow } from "../ui/table";
 import { flexRender, Table } from "@tanstack/react-table";
-import { Application } from "@/lib/types";
+import { Application } from "@/generated/prisma";
 
 interface ApplicationTableHeadProps {
   table: Table<Application>;
