@@ -33,6 +33,7 @@ interface ApplicationTableProps {
   applications: Application[];
   applicationsCount: number;
   onView: (id: number) => void;
+  onEdit: (id: number) => void;
 }
 
 const pageSizeOptions = [20, 50, 100];
@@ -40,10 +41,12 @@ const pageSizeOptions = [20, 50, 100];
 export function ApplicationTable({
   applications,
   onView,
+  onEdit,
   applicationsCount,
 }: ApplicationTableProps) {
   const columns = getColumns({
     onView,
+    onEdit,
   });
 
   const table = useReactTable({

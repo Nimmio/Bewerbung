@@ -10,10 +10,11 @@ import { Badge } from "../ui/badge";
 
 interface getColumnsParams {
   onView: (id: number) => void;
+  onEdit: (id: number) => void;
 }
 
 const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
-  const { onView } = params;
+  const { onView, onEdit } = params;
   const { setOrderBy, setFilter, filter } = useApplicationStore(
     (state) => state
   );
@@ -108,6 +109,9 @@ const getColumns = (params: getColumnsParams): ColumnDef<Application>[] => {
         <div className="flex space-x-2">
           <Button variant="ghost" onClick={() => onView(row.original.id)}>
             View
+          </Button>
+          <Button variant="ghost" onClick={() => onEdit(row.original.id)}>
+            Edit
           </Button>
         </div>
       ),

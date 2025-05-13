@@ -61,6 +61,17 @@ const Applications = (props: ApplicationsProps) => {
     }
   };
 
+  const handleEdit = (id: number) => {
+    const applicationToEdit = applications.find(
+      (application) => application.id === id
+    );
+    if (applicationToEdit) {
+      setEditApplication(applicationToEdit);
+    } else {
+      setEditApplication(null);
+    }
+  };
+
   const handleViewEditButtonClick = () => {
     setEditApplication(viewApplication);
     setViewApplication(null);
@@ -79,6 +90,7 @@ const Applications = (props: ApplicationsProps) => {
         applications={applications}
         applicationsCount={applicationsCount}
         onView={(id) => handleView(id)}
+        onEdit={(id) => handleEdit(id)}
       />
       <AddApplicationDialog
         open={isAddDialogOpen}
