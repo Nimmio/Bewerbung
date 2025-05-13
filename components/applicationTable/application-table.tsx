@@ -32,8 +32,9 @@ import { getPagesCount } from "@/lib/table";
 interface ApplicationTableProps {
   applications: Application[];
   applicationsCount: number;
-  onView: (id: number) => void;
-  onEdit: (id: number) => void;
+  onView: (id: Application["id"]) => void;
+  onEdit: (id: Application["id"]) => void;
+  onDelete: (id: Application["id"]) => void;
 }
 
 const pageSizeOptions = [20, 50, 100];
@@ -42,11 +43,13 @@ export function ApplicationTable({
   applications,
   onView,
   onEdit,
+  onDelete,
   applicationsCount,
 }: ApplicationTableProps) {
   const columns = GetColumns({
     onView,
     onEdit,
+    onDelete,
   });
 
   const table = useReactTable({

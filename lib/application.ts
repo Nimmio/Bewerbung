@@ -156,3 +156,29 @@ export const updateApplication = async (
     return { error };
   }
 };
+
+interface deleteApplicationParams {
+  applicationId: Application["id"];
+}
+
+interface deleteApplicationReturns {
+  deletedApplication?: Application;
+  error?: unknown;
+}
+
+export const deleteApplication = async (
+  params: deleteApplicationParams
+): Promise<deleteApplicationReturns> => {
+  const { applicationId: id } = params;
+  try {
+    const deletedApplication = await prisma.application.delete({
+      where: {
+        id,
+      },
+    });
+    revalidatePath("/");
+    return { deletedApplication };
+  } catch (error) {
+    return { error };
+  }
+};

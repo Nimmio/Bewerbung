@@ -7,14 +7,16 @@ import { Application, Status } from "@/generated/prisma";
 import StatusDropdown from "../statusDropdown/status-dropdown";
 import { useApplicationStore } from "@/provider/application-store-provider";
 import { Badge } from "../ui/badge";
+import DeleteConfirm from "../deleteConfirm/delete-confirm";
 
 interface GetColumnsParams {
-  onView: (id: number) => void;
-  onEdit: (id: number) => void;
+  onView: (id: Application["id"]) => void;
+  onEdit: (id: Application["id"]) => void;
+  onDelete: (id: Application["id"]) => void;
 }
 
 const GetColumns = (params: GetColumnsParams): ColumnDef<Application>[] => {
-  const { onView, onEdit } = params;
+  const { onView, onEdit, onDelete } = params;
   const { setOrderBy, setFilter, filter } = useApplicationStore(
     (state) => state
   );
@@ -113,6 +115,7 @@ const GetColumns = (params: GetColumnsParams): ColumnDef<Application>[] => {
           <Button variant="ghost" onClick={() => onEdit(row.original.id)}>
             Edit
           </Button>
+          <DeleteConfirm onDelete={() => onDelete(row.original.id)} />
         </div>
       ),
     },
