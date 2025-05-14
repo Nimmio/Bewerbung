@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/provider/theme-provider";
 import "./globals.css";
 import { Card } from "@/components/ui/card";
 
@@ -12,9 +13,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <Card className="container mx-auto p-10 mt-4 ">{children}</Card>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Card className="container mx-auto p-10 mt-4 ">{children}</Card>
+        </ThemeProvider>
       </body>
     </html>
   );
