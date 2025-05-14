@@ -1,4 +1,5 @@
 import Applications from "@/components/applications";
+import ThemeToggle from "@/components/themeToggle/theme-toggle";
 import { findApplications, getApplicatiosnCount } from "@/lib/application";
 import { ApplicationStoreProvider } from "@/provider/application-store-provider";
 
@@ -31,7 +32,10 @@ export default async function Home({
   console.log("applicationsCount", applicationsCount);
   return (
     <ApplicationStoreProvider>
-      <h1 className="text-3xl font-bold mb-10">Job Application Manager</h1>
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold mb-10">Job Application Manager</h1>
+        <ThemeToggle />
+      </div>
       <Applications
         applications={applications}
         applicationsCount={applicationsCount}
