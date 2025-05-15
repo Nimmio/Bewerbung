@@ -21,7 +21,7 @@ import {
 } from "../ui/select";
 import { StatusOptions } from "@/lib/status";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { cn } from "@/lib/utils";
+import { cn, isDemo } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "../ui/calendar";
@@ -314,8 +314,9 @@ const ApplicationForm = (props: ApplicationFormProps) => {
             </FormItem>
           )}
         />
-
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={isDemo()}>
+          Submit
+        </Button>
       </form>
     </Form>
   );
