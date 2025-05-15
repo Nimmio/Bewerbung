@@ -1,6 +1,5 @@
 import Applications from "@/components/applications";
 import ThemeToggle from "@/components/themeToggle/theme-toggle";
-import { Card } from "@/components/ui/card";
 import { findApplications, getApplicatiosnCount } from "@/lib/application";
 import { ApplicationStoreProvider } from "@/provider/application-store-provider";
 
