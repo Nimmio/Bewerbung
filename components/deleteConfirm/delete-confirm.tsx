@@ -11,6 +11,7 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import { Trash2 } from "lucide-react";
+import { isDemo } from "@/lib/utils";
 
 interface DeleteConfirmProps {
   onDelete: () => void;
@@ -26,6 +27,7 @@ const DeleteConfirm = (props: DeleteConfirmProps) => {
         size="icon"
         className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
         onClick={() => setOpen(true)}
+        disabled={isDemo()}
       >
         <Trash2 className="h-4 w-4" />
         <span className="sr-only">Delete</span>
