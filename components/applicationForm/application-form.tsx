@@ -23,40 +23,49 @@ import { StatusOptions } from "@/lib/status";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn, isDemo } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { format, isAfter } from "date-fns";
 import { Calendar } from "../ui/calendar";
 import { TCreateApplication } from "@/lib/types";
 import { Textarea } from "../ui/textarea";
 import { Application } from "@/generated/prisma";
 
-const formSchema = z.object({
-  jobTitle: z.string().min(2).max(255),
-  status: z.enum([
-    "Applied",
-    "InterviewScheduled",
-    "Interviewed",
-    "AssessmentScheduled",
-    "AssessmentCompleted",
-    "FollowedUp",
-    "OnHold",
-    "Rejected",
-    "OfferReceived",
-    "OfferAccepted",
-    "OfferDeclined",
-    "Withdrawn",
-    "Closed",
-    "Ghosted",
-  ]),
-  companyName: z.string().min(2).max(255),
-  companyLocation: z.optional(z.string().max(255)),
-  applicationDate: z.date(),
-  applicationMethod: z.string(),
-  link: z.union([z.literal(""), z.string().trim().url()]),
-  contactPerson: z.string().max(255).optional(),
-  contactEmail: z.union([z.literal(""), z.string().trim().email()]),
-  notes: z.string().optional(),
-  expectedSalary: z.string().max(255).optional(),
-});
+const formSchema = z
+  .object({
+    jobTitle: z.string().min(2).max(255),
+    status: z.enum([
+      "Applied",
+      "InterviewScheduled",
+      "Interviewed",
+      "AssessmentScheduled",
+      "AssessmentCompleted",
+      "FollowedUp",
+      "OnHold",
+      "Rejected",
+      "OfferReceived",
+      "OfferAccepted",
+      "OfferDeclined",
+      "Withdrawn",
+      "Closed",
+      "Ghosted",
+    ]),
+    dateOfLastStatusUpdate: z.date(),
+    companyName: z.string().min(2).max(255),
+    companyLocation: z.optional(z.string().max(255)),
+    applicationDate: z.date(),
+    applicationMethod: z.string(),
+    link: z.union([z.literal(""), z.string().trim().url()]),
+    contactPerson: z.string().max(255).optional(),
+    contactEmail: z.union([z.literal(""), z.string().trim().email()]),
+    notes: z.string().optional(),
+    expectedSalary: z.string().max(255).optional(),
+  })
+  .refine(
+    (data) => isAfter(data.dateOfLastStatusUpdate, data.applicationDate),
+    {
+      message: "Date of last update needs to be after application date",
+      path: ["dateOfLastStatusUpdate"],
+    }
+  );
 
 interface ApplicationFormProps {
   onFormSubmit: (application: TCreateApplication) => void;
@@ -71,6 +80,8 @@ const ApplicationForm = (props: ApplicationFormProps) => {
     defaultValues: {
       jobTitle: editApplication?.jobTitle || "",
       status: editApplication?.status || "Applied",
+      dateOfLastStatusUpdate:
+        editApplication?.dateOfLastStatusUpdate || new Date(),
       companyName: editApplication?.companyName || "",
       companyLocation: editApplication?.companyLocation || "",
       applicationDate: editApplication?.applicationDate || new Date(),
@@ -96,10 +107,12 @@ const ApplicationForm = (props: ApplicationFormProps) => {
       contactEmail: values.contactEmail || null,
       notes: values.notes || null,
       expectedSalary: values.expectedSalary || null,
-      dateOfLastStatusUpdate: values.applicationDate || null,
+      dateOfLastStatusUpdate: values.dateOfLastStatusUpdate || null,
     });
   }
-  const [popoverOpen, setpopoverOpen] = useState(false);
+  const [popoverApplicationDateOpen, setPopoverApplicationDateOpen] =
+    useState(false);
+  const [popoverLastUpdateOpen, setPopoverLastUpdateOpen] = useState(false);
 
   return (
     <Form {...form}>
@@ -143,6 +156,53 @@ const ApplicationForm = (props: ApplicationFormProps) => {
         />
         <FormField
           control={form.control}
+          name="dateOfLastStatusUpdate"
+          render={({ field }) => {
+            return (
+              <FormItem>
+                <FormLabel>Date of last status update</FormLabel>
+                <FormControl>
+                  <Popover
+                    open={popoverLastUpdateOpen}
+                    onOpenChange={(open) => {
+                      setPopoverLastUpdateOpen(open);
+                    }}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "col-span-3 justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={(value) => {
+                          field.onChange(value);
+                          setPopoverLastUpdateOpen(false);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          control={form.control}
           name="companyName"
           render={({ field }) => (
             <FormItem>
@@ -176,9 +236,9 @@ const ApplicationForm = (props: ApplicationFormProps) => {
                 <FormLabel>Application Date</FormLabel>
                 <FormControl>
                   <Popover
-                    open={popoverOpen}
+                    open={popoverApplicationDateOpen}
                     onOpenChange={(open) => {
-                      setpopoverOpen(open);
+                      setPopoverApplicationDateOpen(open);
                     }}
                   >
                     <PopoverTrigger asChild>
@@ -203,7 +263,7 @@ const ApplicationForm = (props: ApplicationFormProps) => {
                         selected={field.value}
                         onSelect={(value) => {
                           field.onChange(value);
-                          setpopoverOpen(false);
+                          setPopoverApplicationDateOpen(false);
                         }}
                       />
                     </PopoverContent>

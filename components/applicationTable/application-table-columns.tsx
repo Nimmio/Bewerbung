@@ -44,15 +44,18 @@ const GetColumns = (params: GetColumnsParams): ColumnDef<Application>[] => {
     },
 
     {
-      accessorKey: "applicationDate",
+      accessorKey: "dateOfLastStatusUpdate",
       header: () => (
-        <Button variant="ghost" onClick={() => setOrderBy("applicationDate")}>
-          Date
+        <Button
+          variant="ghost"
+          onClick={() => setOrderBy("dateOfLastStatusUpdate")}
+        >
+          Last Update
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
       cell: ({ row }) => {
-        const date = new Date(row.getValue("applicationDate"));
+        const date = new Date(row.getValue("dateOfLastStatusUpdate"));
         return <div>{date.toLocaleDateString()}</div>;
       },
     },

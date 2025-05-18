@@ -7,9 +7,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import ApplicationForm from "../applicationForm/add-application-dialog-form";
 import { Application } from "@/generated/prisma";
 import { TCreateApplication } from "@/lib/types";
+import ApplicationForm from "../applicationForm/application-form";
 
 interface AddApplicationDialogProps {
   open: boolean;

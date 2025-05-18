@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { TCreateApplication } from "@/lib/types";
-import ApplicationForm from "../applicationForm/add-application-dialog-form";
+import ApplicationForm from "../applicationForm/application-form";
 
 interface AddApplicationDialogProps {
   open: boolean;

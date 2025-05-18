@@ -29,7 +29,6 @@ export default async function Home({
     filter,
     search,
   });
-  console.log("applicationsCount", applicationsCount);
   return (
     <ApplicationStoreProvider>
       <div className="flex justify-between">
