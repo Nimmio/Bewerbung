@@ -23,7 +23,7 @@ import { StatusOptions } from "@/lib/status";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn, isDemo } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
-import { format, isAfter } from "date-fns";
+import { format, isBefore } from "date-fns";
 import { Calendar } from "../ui/calendar";
 import { TCreateApplication } from "@/lib/types";
 import { Textarea } from "../ui/textarea";
@@ -60,9 +60,9 @@ const formSchema = z
     expectedSalary: z.string().max(255).optional(),
   })
   .refine(
-    (data) => isAfter(data.dateOfLastStatusUpdate, data.applicationDate),
+    (data) => !isBefore(data.dateOfLastStatusUpdate, data.applicationDate),
     {
-      message: "Date of last update needs to be after application date",
+      message: "Date of last update cannot be before application date",
       path: ["dateOfLastStatusUpdate"],
     }
   );
